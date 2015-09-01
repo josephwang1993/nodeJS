@@ -5,12 +5,14 @@
 
 var path = require('path');
 var fs = require('fs');
-var ext = process.argv[2];
 
-var mymodule = fs.readdir(path, function callback(err, list) {
-    if (err) return err;
-    for (var i = 0; i < list.length; i++) {
-        if (path.extname(list[i]) == ext)
-            console.log(list[i])
-    }
-});
+module.exports = function (dir, ext, callback) {
+	fs.readdir(dir, function(err, list){
+		if(err)
+			return callback(err);
+		list =list.filter(function(file){
+			return path.extname(file) === '.' + ext;
+		});
+		callback(null, list);
+	})
+};
